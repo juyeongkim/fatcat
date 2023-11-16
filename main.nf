@@ -21,7 +21,7 @@ process FATCAT {
   script:
   """
   set +e
-  /FATCAT-dist-master/FATCATMain/FATCAT -p1 ${p1} -p2 ${p2} -o ${p1.simpleName}__${p2.simpleName} -m
+  /FATCAT-dist-master/FATCATMain/FATCAT -p1 ${p1} -p2 ${p2} -o ${p1.simpleName}._.${p2.simpleName} -m
   exit 0
   """
 }
