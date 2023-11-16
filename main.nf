@@ -1,14 +1,19 @@
 #!/usr/bin/env nextflow
 nextflow.enable.dsl=2
 
-P1 = Channel.fromPath("${params.p1}/*.pdb").map {[it.name, it]}
-P2 = Channel.fromPath("${params.p2}/*.pdb").map {[it.name, it]}
+P1 = Channel.fromPath("${params.p1}/*.pdb")
+if (params.p2) {
+  P2 = Channel.fromPath("${params.p2}/*.pdb")
+  PAIRS = P1.combine(P2)
+} else {
+  PAIRS = P1.combine(P1).filter{it[0] != it[1]}.map{it.sort()}.unique()
+}
 
 process FATCAT {
-  publishDir "${params.output}", mode: 'link'
+  publishDir "${params.output}", mode: 'copy'
 
   input:
-  tuple val(p1_id), path(p1_file, stageAs: 'p1/*'), val(p2_id), path(p2_file, stageAs: 'p2/*')
+  tuple path(p1, stageAs: 'p1/*'), path(p2, stageAs: 'p2/*')
 
   output:
   path "*.aln"
@@ -16,16 +21,11 @@ process FATCAT {
   script:
   """
   set +e
-  /FATCAT-dist-master/FATCATMain/FATCAT -p1 ${p1_file} -p2 ${p2_file} -o ${p1_id}_${p2_id} -m
+  /FATCAT-dist-master/FATCATMain/FATCAT -p1 ${p1} -p2 ${p2} -o ${p1.simpleName}__${p2.simpleName} -m
   exit 0
   """
 }
 
 workflow {
-  if (params.p2) {
-    PAIRS = P1.combine(P2)
-  } else {
-    PAIRS = P1.toList().flatMap{it.subsequences().findAll {it.size() == 2}.collect {it.flatten()}}
-  }
   FATCAT(PAIRS)
 }

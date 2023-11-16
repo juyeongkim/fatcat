@@ -27,14 +27,14 @@ nextflow pull juyeongkim/fatcat
 
 If your input directory has $N$ number of pdb files, this will run FATCAT on all combinations - ${N \choose 2}$. For example:
 
-| `--p1` | `--output`      |
-| ------ | --------------- |
-| 1.pdb  | 1.pdb_2.pdb.aln |
-| 2.pdb  | 1.pdb_3.pdb.aln |
-| 3.pdb  | 1.pdb_4.pdb.aln |
-| 4.pdb  | 2.pdb_3.pdb.aln |
-|        | 2.pdb_4.pdb.aln |
-|        | 3.pdb_4.pdb.aln |
+| `--p1` | `--output` |
+| ------ | ---------- |
+| 1.pdb  | 1__2.aln   |
+| 2.pdb  | 1__3.aln   |
+| 3.pdb  | 1__4.aln   |
+| 4.pdb  | 2__3.aln   |
+|        | 2__4.aln   |
+|        | 3__4.aln   |
 
 ```sh
 nextflow run juyeongkim/fatcat -r main --p1 /your/input/dir --output /your/output/dir
@@ -42,16 +42,16 @@ nextflow run juyeongkim/fatcat -r main --p1 /your/input/dir --output /your/outpu
 
 Or if you would like to compare these files against another set of files - $M$, this will run FATCAT on all pairs - $N \times M$. For example:
 
-| `--p1` | `--p2` | `--output`      |
-| ------ | ------ | --------------- |
-| 1.pdb  | x.pdb  | 1.pdb_x.pdb.aln |
-| 2.pdb  | y.pdb  | 1.pdb_y.pdb.aln |
-| 3.pdb  |        | 2.pdb_x.pdb.aln |
-| 4.pdb  |        | 2.pdb_y.pdb.aln |
-|        |        | 3.pdb_x.pdb.aln |
-|        |        | 3.pdb_y.pdb.aln |
-|        |        | 4.pdb_x.pdb.aln |
-|        |        | 4.pdb_y.pdb.aln |
+| `--p1` | `--p2` | `--output` |
+| ------ | ------ | ---------- |
+| 1.pdb  | x.pdb  | 1__x.aln   |
+| 2.pdb  | y.pdb  | 1__y.aln   |
+| 3.pdb  |        | 2__x.aln   |
+| 4.pdb  |        | 2__y.aln   |
+|        |        | 3__x.aln   |
+|        |        | 3__y.aln   |
+|        |        | 4__x.aln   |
+|        |        | 4__y.aln   |
 
 ```sh
 nextflow run juyeongkim/fatcat -r main --p1 /your/input/dir --p2 /your/other/input/dir --output /your/output/dir
