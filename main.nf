@@ -21,6 +21,7 @@ process FATCAT {
   script:
   """
   set +e
+  export OMP_NUM_THREADS=${task.cpus}
   /FATCAT-dist-master/FATCATMain/FATCAT -p1 ${p1} -p2 ${p2} -o ${p1.simpleName}._.${p2.simpleName} -m
   exit 0
   """
